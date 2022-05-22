@@ -19,6 +19,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.dtw.errorHandler.error.ApiError;
@@ -180,6 +181,14 @@ public class RestExceptionHandler {
 	// Converter error exception
 	@ExceptionHandler(ConversionFailedException.class)
 	protected ResponseEntity<ApiError> handleConversionFailed(ConversionFailedException ex) {
+		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);
+		apiError.setMessage(ex.getMessage());
+		return apiError.buildResponseEntity();
+	}
+	
+	// Request is not multipart exception
+	@ExceptionHandler(MultipartException.class)
+	protected ResponseEntity<ApiError> handleMultipart(MultipartException ex) {
 		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);
 		apiError.setMessage(ex.getMessage());
 		return apiError.buildResponseEntity();
