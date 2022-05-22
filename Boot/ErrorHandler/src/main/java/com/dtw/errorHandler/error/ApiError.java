@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonFormat.Shape;
@@ -52,5 +53,27 @@ public class ApiError {
 
 	public void addSubError(ApiSubError subError) {
 		this.subErrors.add(subError);
+	}
+	
+	public ResponseEntity<ApiError> buildResponseEntity() {
+		return new ResponseEntity<>(this, this.getStatus());
+	}
+	
+	public static ApiError entityNotFound(String resourceName, String identifierName, Object indentifierValue) {
+		ApiError apiError = new ApiError(HttpStatus.NOT_FOUND);
+		apiError.setMessage(resourceName + " with " + identifierName + " [" + indentifierValue + "] not found");
+		return apiError;
+	}
+	
+	public static ApiError entityAlreadyExists(String resourceName, String identifierName, Object indentifierValue) {
+		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);
+		apiError.setMessage(resourceName + " with " + identifierName + " [" + indentifierValue + "] already exists");
+		return apiError;
+	}
+	
+	public static ApiError entityDoesntContainEntity(String parentResourceName, String childResourceName, String identifierName, Object indentifierValue) {
+		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);
+		apiError.setMessage(parentResourceName + " does not contain " + childResourceName + " with " + identifierName + " [" + indentifierValue + "]");
+		return apiError;
 	}
 }
