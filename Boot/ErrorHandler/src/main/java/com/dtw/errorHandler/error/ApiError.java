@@ -71,9 +71,15 @@ public class ApiError {
 		return apiError;
 	}
 	
-	public static ApiError entityDoesntContainEntity(String parentResourceName, String childResourceName, String identifierName, Object indentifierValue) {
+	public static ApiError entityDoesntContainEntity(String parentResourceName, String childResourceName, String childIdentifierName, Object chilIndentifierValue) {
 		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);
-		apiError.setMessage(parentResourceName + " does not contain " + childResourceName + " with " + identifierName + " [" + indentifierValue + "]");
+		apiError.setMessage(parentResourceName + " does not contain " + childResourceName + " with " + childIdentifierName + " [" + chilIndentifierValue + "]");
+		return apiError;
+	}
+	
+	public static ApiError entityAlreadyContainsEntity(String parentResourceName, String childResourceName, String childIdentifierName, Object chilIndentifierValue) {
+		ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST);
+		apiError.setMessage(parentResourceName + " already contains " + childResourceName + " with " + childIdentifierName + " [" + chilIndentifierValue + "]");
 		return apiError;
 	}
 }
